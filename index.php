@@ -32,6 +32,8 @@
       background-color: #d3d3d3;
       border: none;
       border-radius: 4px;
+      text-align: center;
+      font-size: 18px;
     }
 
     .botoes {
@@ -40,139 +42,101 @@
     }
 
     .botao {
-      width: 50px;
+      width: 100px;
       height: 50px;
       background-color: #d3d3d3;
       border: none;
       border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .ativo {
+      background-color: #4CAF50;
+      color: white;
     }
 
     .seta {
       font-size: 24px;
+      cursor: pointer;
     }
   </style>
 </head>
 
-
-
 <body>
-
-  <!-- Parte PHP -->
-  <?php 
-    $celsius;
-    $fahreinhent;
-    $kelvin;
-
-
-
-    <?php
-    // conversor.php
-    
-    // Celsius -> Fahrenheit
-    function conversor1($valor) {
-        return ($valor * 9 / 5) + 32;
-    }
-    
-    // Celsius -> Kelvin
-    function conversor2($valor) {
-        return $valor + 273.15;
-    }
-    
-    // Fahrenheit -> Celsius (inverso do conversor1)
-    function fahrenheitParaCelsius($valor) {
-        return ($valor - 32) * 5 / 9;
-    }
-    
-    // Kelvin -> Celsius (inverso do conversor2)
-    function kelvinParaCelsius($valor) {
-        return $valor - 273.15;
-    }
-    
-    // Fahrenheit -> Kelvin: converte para Celsius e depois para Kelvin
-    function fahrenheitParaKelvin($valor) {
-        $celsius = fahrenheitParaCelsius($valor);
-        return conversor2($celsius);
-    }
-    
-    // Kelvin -> Fahrenheit: converte para Celsius e depois para Fahrenheit
-    function kelvinParaFahrenheit($valor) {
-        $celsius = kelvinParaCelsius($valor);
-        return conversor1($celsius);
-    }
-    ?>
-    
-    /*       
-
-      ///Lógica do programa:
-
-      //funcionamento básico: O usuário coloca um valor no campo da esquerda, clica em uma dos tipos de temperatura na esquerda, o programa entao guarda esse tipo e valor,
-      //passa para o lado direito e espera o usuário clicar para qual tipo de temperatura ele quer converter (obs: na parte direita, o botão que represneta a temperatura informada do lado direito estará bloqueado (obviamente para evitar de converter de celsius para celsius por exemplo))
-      
-      // Função de verificar (ao clicar em qualquer um dos botões da direita ou em um botão do meio(botão reserva para caso buge o resto) (só vai dar para clicar nos botões da direita após selecionar algum botão da esquerda ou apertar no botão seta do meio) 
-        // Ler qual é o tipo de temperatura informada:
-          // if botão 1-esquerda estiver ativo: valor que está dentro do input da esquerda é em celsius
-          // if botão 2-esquerda estiver ativo: valor que está dentro do input da esquerda é em fahrenheit
-          // if botão 3-esquerda estiver ativo: valor que está dentro do input da esquerda é em kelvin
-        //primeiro teste: se o campo da esquerda está retornando os dois dados corretamente (valor e tipo da temperatura)
-        // ler para qual tipo de temperatura será convertida.
-          // if botão 1-direita estiver ativo: Tipo de temperatura a ser convertida é em celsius
-          // if botão 2-direita estiver ativo: Tipo de temperatura a ser convertida é em fahrenheit
-          // if botão 3-direita estiver ativo: Tipo de temperatura a ser convertida é em kelvin
-        // reliza a função de conversão (uma função que recebe temperatura contendo valor e o tipo (dado1 e dado2) e para qual tipo de temperatura a ser convertida (dado 3))
-           switch ($dado3) {
-               
-              case "celsius":               
-                realizar função de converter para celcius recebendo dado 1 e 2 nos parâmetros, retornando uma temperatura para ser exibida no campo input da direita
-                printa o resultado no input direita
-                break;
-
-              case "fahrenheit":
-                  converte primeiro o valor da esquerda para celsius
-                  realizar função de converter para fahrenheit, recebendo dado 1 e 2 nos parâmetros, retornando uma temperatura para ser exibida no campo input da direita
-                  printa o resultado no input direita
-                  break;
-
-              case "kelvin":
-                  converte primeiro o valor da esquerda para celsius
-                  realizar função de converter para kelvin, recebendo dado 1 e 2 nos parâmetros, retornando uma temperatura para ser exibida no campo input da direita
-                  printa o resultado no input direita
-                  break;
-
-            }
-        // Segundo teste: Se a conversão foi realizada corretamente
-        // se o usuário  clicar no botão de reiniciar no meio, volta para o início
-        // terceiro teste: Se as variáveis foram todas resetadas e esta tudo pronto para uma nova conversão...
-          
-
-    */
-
-  
-  ?>
-
-
   <div class="container">
-    //Bloco da esquerda 
+    <!-- Bloco da esquerda -->
     <div class="bloco">
-      <input type="text" class="input-temperatura" placeholder="Temperatura">
+      <input type="text" id="valor" class="input-temperatura" placeholder="Temperatura">
       <div class="botoes">
-        <button class="botao" id="1-esquerda">Celsius</button>
-        <button class="botao" id="2-esquerda">Fahrenheit</button>
-        <button class="botao" id="3-esquerda">Kelvin</button>
+        <button class="botao tipo-atual" data-tipo="celsius">Celsius</button>
+        <button class="botao tipo-atual" data-tipo="fahrenheit">Fahrenheit</button>
+        <button class="botao tipo-atual" data-tipo="kelvin">Kelvin</button>
       </div>
     </div>
 
-    //bloco do meio
-    <div class="seta">→</div>
+    <!-- Bloco do meio -->
+    <div class="botoes-meio">
+      <button class="botao-meio" id="converter">→</button>
+      <button class="botao-meio" id="reiniciar">⟲</button>
+    </div>
 
-    //bloco direita
+    <!-- Bloco da direita -->
     <div class="bloco">
-      <input type="text" class="input-temperatura" disabled>
+      <input type="text" id="resultado" class="input-temperatura" disabled>
       <div class="botoes">
-        <button class="botao"></button>
-        <button class="botao"></button>
-        <button class="botao"></button>
+        <button class="botao tipo-destino" data-tipo="celsius">Celsius</button>
+        <button class="botao tipo-destino" data-tipo="fahrenheit">Fahrenheit</button>
+        <button class="botao tipo-destino" data-tipo="kelvin">Kelvin</button>
       </div>
     </div>
   </div>
+
+  <script>
+    let tipoAtual = null;
+    let tipoDestino = null;
+
+    // Botões da esquerda (origem)
+    document.querySelectorAll('.tipo-atual').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tipoAtual = btn.dataset.tipo;
+        document.querySelectorAll('.tipo-atual').forEach(b => b.classList.remove('ativo'));
+        btn.classList.add('ativo');
+      });
+    });
+
+    // Botões da direita (destino)
+    document.querySelectorAll('.tipo-destino').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tipoDestino = btn.dataset.tipo;
+        document.querySelectorAll('.tipo-destino').forEach(b => b.classList.remove('ativo'));
+        btn.classList.add('ativo');
+      });
+    });
+
+    // Botão do meio (converter)
+    document.getElementById('converter').addEventListener('click', () => {
+      const valor = document.getElementById('valor').value;
+
+      if (!tipoAtual || !tipoDestino || !valor) {
+        alert("Preencha todos os campos e selecione os tipos de temperatura.");
+        return;
+      }
+
+      fetch('controlador.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `valor=${encodeURIComponent(valor)}&tipo_atual=${tipoAtual}&tipo_destino=${tipoDestino}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('resultado').value = data.resultado;
+      })
+      .catch(error => {
+        alert("Erro ao converter: " + error);
+      });
+    });
+  </script>
 </body>
 </html>
